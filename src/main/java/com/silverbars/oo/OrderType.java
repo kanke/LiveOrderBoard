@@ -8,13 +8,13 @@ import static java.lang.Double.POSITIVE_INFINITY;
 
 public enum OrderType {
     BUY(POSITIVE_INFINITY) {
-        public double quantity(double quantity) {
-            return Math.abs(quantity);
+        public Quantity quantity(Quantity quantity) {
+            return new Quantity(Math.abs(quantity.value()));
         }
     },
     SELL(NEGATIVE_INFINITY) {
-        public double quantity(double quantity) {
-            return Math.abs(quantity) * -1.0;
+        public Quantity quantity(Quantity quantity) {
+            return new Quantity(Math.abs(quantity.value()) * -1.0);
         }
     };
 
@@ -39,6 +39,6 @@ public enum OrderType {
         return Math.signum(sign);
     }
 
-    abstract double quantity(double quantity);
+    abstract Quantity quantity(Quantity quantity);
 
 }

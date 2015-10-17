@@ -218,11 +218,11 @@ public class LiveOrderBoardTest {
     }
 
     private int positionInBoardOfOrderWith(final int price, final OrderType type) {
-        return orderSummary.indexOf(aSummaryOf(ANY_QUANTITY, price, type));
+        return orderSummary.indexOf(aSummaryOf(new Quantity(ANY_QUANTITY), price, type));
     }
 
     private void assertOrderSummaryContains(final double quantity, final int price, final OrderType type) {
-        assertThat(orderSummary, hasItem(new Summary(quantity, price, type)));
+        assertThat(orderSummary, hasItem(new Summary(new Quantity(quantity), price, type)));
     }
 
     private void assertOrderSummary(final int position, final double quantity, final int price) {

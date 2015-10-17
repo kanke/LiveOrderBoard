@@ -9,7 +9,7 @@ import static com.silverbars.oo.Summary.aSummaryOf;
 
 public class Summariser {
 
-    private static final QuantityType ZERO_QUANTITY = aQuantityType(0, BUY);
+    private static final QuantityType ZERO_QUANTITY = aQuantityType(new Quantity(0), BUY);
 
     List<Summary> summarise(final List<Order> orders) {
         final Map<Price, List<QuantityType>> quantitiesByPrice = groupOrderQuantityAndTypeByPrice(orders);
@@ -26,7 +26,7 @@ public class Summariser {
 
         for (Order order : orders) {
             final Price priceForQuantity = new Price(order.price());
-            final QuantityType quantityType = aQuantityType(order.quantity(), order.type());
+            final QuantityType quantityType = aQuantityType(new Quantity(order.quantity()), order.type());
 
             if (groupedQuantites.containsKey(priceForQuantity)){
                 groupedQuantites.get(priceForQuantity).add(quantityType);
