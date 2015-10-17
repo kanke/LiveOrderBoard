@@ -8,12 +8,12 @@ import static java.lang.Double.POSITIVE_INFINITY;
 
 public enum OrderType {
     BUY(POSITIVE_INFINITY) {
-        public Quantity quantity(Quantity quantity) {
+        public Quantity quantity(final Quantity quantity) {
             return new Quantity(Math.abs(quantity.value()));
         }
     },
     SELL(NEGATIVE_INFINITY) {
-        public Quantity quantity(Quantity quantity) {
+        public Quantity quantity(final Quantity quantity) {
             return new Quantity(Math.abs(quantity.value()) * -1.0);
         }
     };
@@ -31,11 +31,11 @@ public enum OrderType {
         }
     }
 
-    public static OrderType typeFor(double quantity) {
+    public static OrderType typeFor(final double quantity) {
         return ORDER_TYPE_FOR_SIGN.get(signOf(quantity));
     }
 
-    private static double signOf(double sign) {
+    private static double signOf(final double sign) {
         return Math.signum(sign);
     }
 

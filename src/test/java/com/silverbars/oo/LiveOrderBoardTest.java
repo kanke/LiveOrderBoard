@@ -18,16 +18,16 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 public class LiveOrderBoardTest {
 
 
-    public static final double A_QUANTITY = 3.5;
-    public static final int A_PRICE = 303;
+    private static final double A_QUANTITY = 3.5;
+    private static final int A_PRICE = 303;
     private static final int LOW_PRICE = 100;
     private static final int HIGH_PRICE = 200;
-    public static final int LOW_BUY_PRICE = 100;
-    public static final int HIGH_BUY_PRICE = 200;
-    public static final int HIGH_SELL_PRICE = 400;
-    public static final int LOW_SELL_PRICE = 300;
-    public static final String ANY_USER = "user1";
-    public static final double ANY_QUANTITY = 5.0;
+    private static final int LOW_BUY_PRICE = 100;
+    private static final int HIGH_BUY_PRICE = 200;
+    private static final int HIGH_SELL_PRICE = 400;
+    private static final int LOW_SELL_PRICE = 300;
+    private static final String ANY_USER = "user1";
+    private static final double ANY_QUANTITY = 5.0;
     private LiveOrderBoard orderBoard;
     private List<Summary> orderSummary;
 

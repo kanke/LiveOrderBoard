@@ -4,11 +4,11 @@ public class Price {
 
     private final Integer amount;
 
-    public Price(Integer amount) {
+    Price(final Integer amount) {
         this.amount = amount;
     }
 
-    public Integer amount() {
+    Integer amount() {
         return amount;
     }
 

@@ -4,7 +4,7 @@ public class Quantity {
 
     private Double value;
 
-    public Quantity(double value) {
+    Quantity(final double value) {
         this.value = value;
     }
 
@@ -12,7 +12,7 @@ public class Quantity {
         return value;
     }
 
-    public Quantity sum(Quantity quantity) {
+    Quantity sum(final Quantity quantity) {
         return new Quantity(this.value + quantity.value);
     }
 

@@ -7,25 +7,25 @@ public class QuantityType {
     private Quantity quantity;
     private OrderType type;
 
-    private QuantityType(Quantity quantity, OrderType type) {
+    private QuantityType(final Quantity quantity, final OrderType type) {
         this.quantity = type.quantity(quantity);
         this.type = type;
     }
 
-    public static QuantityType aQuantityType(Quantity quantity, OrderType type) {
+    static QuantityType aQuantityType(final Quantity quantity, final OrderType type) {
         return new QuantityType(quantity, type);
     }
 
-    public QuantityType aggregateWith(QuantityType aQuantity) {
+    QuantityType aggregateWith(final QuantityType aQuantity) {
         Quantity totalQuantity = this.quantity.sum(aQuantity.quantity);
         return aQuantityType(totalQuantity, typeFor(totalQuantity.value()));
     }
 
-    public Quantity quantity() {
+    Quantity quantity() {
         return new Quantity(Math.abs(quantity.value()));
     }
 
-    public OrderType type() {
+    OrderType type() {
         return type;
     }
 }
