@@ -1,36 +1,44 @@
 package com.silverbars.lambda;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class LiveOrderBoardLambda {
 
-    List<Order> orders;
+    private static final Comparator<Summary> BY_TYPE = comparing(Summary::type);
+    private static final Comparator<Summary> BY_PRICE = (summary, summaryToCompareWith) -> summary.type().comparePrice(summary.price(), summaryToCompareWith.price());
+
+    private List<Order> orders;
 
     public LiveOrderBoardLambda() {
         orders = new ArrayList<>();
     }
 
     public List<Summary> summary() {
-        return orders.stream()
-                .map(order -> new Summary(new Quantity(order.quantity()), order.price(), order.type()))
-                .sorted(comparing(Summary::type))
-                .sorted((sum1, sum2) -> {
-                    if (sum1.type() == OrderType.SELL) {
-                        return byPrice(sum1, sum2);
-                    } else {
-                        return byPrice(sum2, sum1);
-                    }
-                })
-                .collect(toList());
+        Map<Integer, List<Summary>> summariesByPrice = orders.stream()
+                                                    .map(order -> new Summary(new Quantity(order.quantity()), order.price(), order.type()))
+                                                    .collect(groupingBy(Summary::price));
+
+        List<Summary> summaryForPrice = summariesByPrice
+                                                .values()
+                                                .stream()
+                                                .map(summaryList -> summaryList.stream()
+                                                        .reduce((sum1, sum2) -> sum1.add(sum2))
+                                                        .get())
+                                                .collect(toList());
+
+        return summaryForPrice.stream()
+                            .sorted(BY_TYPE)
+                            .sorted(BY_PRICE)
+                            .collect(toList());
     }
 
-    private int byPrice(Summary sum1, Summary sum2) {
-        return sum1.price().compareTo(sum2.price());
-    }
 
     public void register(String user, double quantity, int price, OrderType orderType) {
         orders.add(new Order(user, quantity, price, orderType));

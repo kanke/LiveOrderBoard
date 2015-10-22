@@ -28,6 +28,11 @@ public class Summary {
         return orderType;
     }
 
+    public Summary add(Summary summaryToAdd) {
+        Quantity totalQuantity = this.quantity.add(summaryToAdd.quantity);
+        return new Summary(totalQuantity, this.price, this.orderType);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,5 +53,14 @@ public class Summary {
         result = 31 * result + price.hashCode();
         result = 31 * result + orderType.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Summary{" +
+                "quantity=" + quantity +
+                ", price=" + price +
+                ", orderType=" + orderType +
+                '}';
     }
 }

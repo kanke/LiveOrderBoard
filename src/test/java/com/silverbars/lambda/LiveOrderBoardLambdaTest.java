@@ -153,7 +153,7 @@ public class LiveOrderBoardLambdaTest {
 
 
     @Test public void
-    boardShowsOrdersInSequence_WhenBuyAndSellOrdersXXXWithDifferentPriceAreRegistered() {
+    boardShowsOrdersInSequence_WhenBuyAndSellOrdersXWithDifferentPriceAreRegistered() {
         registerOrderWith(LOW_BUY_PRICE, BUY);
         registerOrderWith(HIGH_SELL_PRICE, SELL);
         registerOrderWith(HIGH_BUY_PRICE, BUY);
@@ -166,7 +166,7 @@ public class LiveOrderBoardLambdaTest {
         assertThat(positionInBoardOfOrderWith(LOW_SELL_PRICE, SELL), isHigherThan(positionInBoardOfOrderWith(HIGH_SELL_PRICE, SELL)));
     }
 
-    @Ignore public void
+    @Test public void
     boardShowsAggregatedQuantity_WhenTwoBuyOrdersWithSamePriceAreRegistered() {
         orderBoard.register("user1", 5.0, LOW_PRICE, BUY);
         orderBoard.register("user2", 3.5, LOW_PRICE, BUY);
@@ -177,7 +177,7 @@ public class LiveOrderBoardLambdaTest {
         assertOrderSummaryContains(8.5, LOW_PRICE, BUY);
     }
 
-    @Ignore public void
+    @Test public void
     boardShowsAggregatedQuantity_WhenMultipleBuyOrdersWithSomeAtSamePriceAreRegistered() {
         orderBoard.register("user1", 5.0, LOW_PRICE, BUY);
         orderBoard.register("user2", 3.5, LOW_PRICE, BUY);
@@ -190,7 +190,7 @@ public class LiveOrderBoardLambdaTest {
         assertOrderSummaryContains(8.5, LOW_PRICE, BUY);
     }
 
-    @Ignore public void
+    @Test public void
     boardShowsAggregatedQuantity_WhenMultipleSellOrdersWithSomeAtSamePriceAreRegistered() {
         orderBoard.register("user1", 4.0, HIGH_PRICE, SELL);
         orderBoard.register("user2", 3.5, HIGH_PRICE, SELL);
@@ -203,7 +203,7 @@ public class LiveOrderBoardLambdaTest {
         assertOrderSummaryContains(7.5, HIGH_PRICE, SELL);
     }
 
-    @Ignore public void
+    @Test public void
     boardShowsAggregatedQuantity_WhenMultipleDifferentTypesOfOrderAreRegistered() {
         orderBoard.register("user1", 4.0, HIGH_PRICE, SELL);
         orderBoard.register("user2", 3.5, HIGH_PRICE, SELL);
@@ -217,7 +217,8 @@ public class LiveOrderBoardLambdaTest {
         assertOrderSummaryContains(8.5, LOW_PRICE, BUY);
     }
 
-    @Ignore public void
+    @Ignore
+    public void
     boardShowsAggregatedQuantity_WhenMultipleDifferentTypesOfOrderForTheSamePriceAreRegistered() {
         orderBoard.register("user1", 4.0, HIGH_PRICE, SELL);
         orderBoard.register("user4", 3.5, HIGH_PRICE, BUY);

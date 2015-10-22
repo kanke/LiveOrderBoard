@@ -39,4 +39,8 @@ public class Quantity {
                 "value=" + value +
                 '}';
     }
+
+    public Quantity add(Quantity quantity) {
+        return new Quantity(this.value + quantity.value);
+    }
 }
