@@ -1,26 +1,29 @@
 package com.silverbars.lambda;
 
-public class Summary {
+import java.util.function.Function;
 
-    private final Quantity quantity;
+class Summary {
+
+    private final Double quantity;
     private final Integer price;
     private final OrderType orderType;
 
-    Summary(final Quantity quantity, final int price, final OrderType orderType) {
+    Summary(final Double quantity, final int price, final OrderType orderType) {
         this.quantity = quantity;
         this.price = price;
         this.orderType = orderType;
     }
 
-    static Summary aSummaryOf(final Quantity quantity, final int price, final OrderType orderType) {
-        return new Summary(quantity, price, orderType);
+
+    static Summary aSummaryOf(final Double quantity, final int price, Function<Double, OrderType> typeForQuantity) {
+        return new Summary(Math.abs(quantity), price, typeForQuantity.apply(quantity));
     }
 
-    public double quantity() {
-        return quantity.value();
+    double quantity() {
+        return quantity;
     }
 
-    public Integer price() {
+    Integer price() {
         return price;
     }
 
@@ -28,9 +31,13 @@ public class Summary {
         return orderType;
     }
 
-    public Summary add(Summary summaryToAdd) {
-        Quantity totalQuantity = this.quantity.add(summaryToAdd.quantity);
-        return new Summary(totalQuantity, this.price, this.orderType);
+    @Override
+    public String toString() {
+        return "Summary{" +
+                "quantity=" + quantity +
+                ", price=" + price +
+                ", orderType=" + orderType +
+                '}';
     }
 
     @Override
@@ -53,14 +60,5 @@ public class Summary {
         result = 31 * result + price.hashCode();
         result = 31 * result + orderType.hashCode();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Summary{" +
-                "quantity=" + quantity +
-                ", price=" + price +
-                ", orderType=" + orderType +
-                '}';
     }
 }

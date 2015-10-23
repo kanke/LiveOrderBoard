@@ -1,6 +1,6 @@
 package com.silverbars.lambda;
 
-public class Order {
+class Order {
 
     private final String userId;
     private final double quantity;

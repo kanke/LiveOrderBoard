@@ -3,7 +3,6 @@ package com.silverbars.lambda;
 import org.hamcrest.Matcher;
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -217,7 +216,7 @@ public class LiveOrderBoardLambdaTest {
         assertOrderSummaryContains(8.5, LOW_PRICE, BUY);
     }
 
-    @Ignore
+    @Test
     public void
     boardShowsAggregatedQuantity_WhenMultipleDifferentTypesOfOrderForTheSamePriceAreRegistered() {
         orderBoard.register("user1", 4.0, HIGH_PRICE, SELL);
@@ -234,11 +233,11 @@ public class LiveOrderBoardLambdaTest {
     }
 
     private int positionInBoardOfOrderWith(final int price, final OrderType type) {
-        return orderSummary.indexOf(aSummaryOf(new Quantity(ANY_QUANTITY), price, type));
+        return orderSummary.indexOf(aSummaryOf(ANY_QUANTITY, price, q -> type));
     }
 
     private void assertOrderSummaryContains(final double quantity, final int price, final OrderType type) {
-        assertThat(orderSummary, hasItem(new Summary(new Quantity(quantity), price, type)));
+        assertThat(orderSummary, hasItem(new Summary(quantity, price, type)));
     }
 
     private void assertOrderSummary(final int position, final double quantity, final int price) {

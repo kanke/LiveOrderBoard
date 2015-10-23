@@ -5,9 +5,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import static com.silverbars.lambda.OrderType.BUY;
+import static com.silverbars.lambda.OrderType.SELL;
+import static com.silverbars.lambda.Summary.aSummaryOf;
 import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class LiveOrderBoardLambda {
 
@@ -21,17 +23,31 @@ public class LiveOrderBoardLambda {
     }
 
     public List<Summary> summary() {
-        Map<Integer, List<Summary>> summariesByPrice = orders.stream()
-                                                    .map(order -> new Summary(new Quantity(order.quantity()), order.price(), order.type()))
-                                                    .collect(groupingBy(Summary::price));
+        Map<Integer, Double> aggregatedQuantityPerPrice = orders.stream()
+                                                            .collect(groupingBy(Order::price,
+                                                                    reducing(0.0,
+                                                                             (order) -> {
+                                                                                            if (order.type() == SELL) {
+                                                                                                return order.quantity() * -1.0;
+                                                                                            } else {
+                                                                                                return order.quantity();
+                                                                                            }
+                                                                                        }
+                                                                             , Double::sum))
+                                                            );
 
-        List<Summary> summaryForPrice = summariesByPrice
-                                                .values()
-                                                .stream()
-                                                .map(summaryList -> summaryList.stream()
-                                                        .reduce((sum1, sum2) -> sum1.add(sum2))
-                                                        .get())
-                                                .collect(toList());
+        List<Summary> summaryForPrice =  aggregatedQuantityPerPrice
+                                        .entrySet()
+                                        .stream()
+                                        .map(price -> aSummaryOf(price.getValue(), price.getKey(), quantity -> {
+                                                                                                                    if (quantity < 0.0) {
+                                                                                                                        return SELL;
+                                                                                                                    } else {
+                                                                                                                        return BUY;
+                                                                                                                    }
+                                                                                                               })
+                                        )
+                                        .collect(toList());
 
         return summaryForPrice.stream()
                             .sorted(BY_TYPE)
