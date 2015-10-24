@@ -12,8 +12,9 @@ public class Price implements Comparable<Price>{
         return new Price(amount);
     }
 
-    Integer amount() {
-        return amount;
+    @Override
+    public int compareTo(Price priceToCompare) {
+        return amount.compareTo(priceToCompare.amount);
     }
 
     @Override
@@ -31,11 +32,6 @@ public class Price implements Comparable<Price>{
     @Override
     public int hashCode() {
         return amount.hashCode();
-    }
-
-    @Override
-    public int compareTo(Price priceToCompare) {
-        return amount.compareTo(priceToCompare.amount);
     }
 
 }

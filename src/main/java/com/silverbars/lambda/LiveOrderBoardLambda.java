@@ -7,6 +7,7 @@ import java.util.Map;
 
 import static com.silverbars.lambda.OrderType.BUY;
 import static com.silverbars.lambda.OrderType.SELL;
+import static com.silverbars.lambda.Quantity.aQuantity;
 import static com.silverbars.lambda.Summary.aSummaryOf;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
@@ -23,24 +24,24 @@ public class LiveOrderBoardLambda {
     }
 
     public List<Summary> summary() {
-        Map<Price, Double> aggregatedQuantityPerPrice = orders.stream()
+        Map<Price, Quantity> aggregatedQuantityPerPrice = orders.stream()
                                                             .collect(groupingBy(Order::price,
-                                                                    reducing(0.0,
-                                                                             (order) -> {
-                                                                                            if (order.type() == SELL) {
-                                                                                                return order.quantity() * -1.0;
-                                                                                            } else {
-                                                                                                return order.quantity();
-                                                                                            }
-                                                                                        }
-                                                                             , Double::sum))
+                                                                    reducing(aQuantity(0.0),
+                                                                            (order) -> {
+                                                                                if (order.type() == SELL) {
+                                                                                    return order.quantity().negative();
+                                                                                } else {
+                                                                                    return order.quantity();
+                                                                                }
+                                                                            }
+                                                                            , Quantity::sum))
                                                             );
 
         List<Summary> summaryForPrice =  aggregatedQuantityPerPrice
                                         .entrySet()
                                         .stream()
                                         .map(price -> aSummaryOf(price.getValue(), price.getKey(), quantity -> {
-                                                                                                                    if (quantity < 0.0) {
+                                                                                                                    if (quantity.lessThanZero()) {
                                                                                                                         return SELL;
                                                                                                                     } else {
                                                                                                                         return BUY;
@@ -56,13 +57,12 @@ public class LiveOrderBoardLambda {
     }
 
 
-    public void register(String user, double quantity, Price price, OrderType orderType) {
+    public void register(String user, Quantity quantity, Price price, OrderType orderType) {
         orders.add(new Order(user, quantity, price, orderType));
     }
 
-    public void cancel(String user, double quantity, Price price, OrderType orderType) {
+    public void cancel(String user, Quantity quantity, Price price, OrderType orderType) {
         orders.remove(new Order(user, quantity, price, orderType));
     }
-
 
 }

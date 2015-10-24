@@ -4,22 +4,22 @@ import java.util.function.Function;
 
 class Summary {
 
-    private final Double quantity;
+    private final Quantity quantity;
     private final Price price;
     private final OrderType orderType;
 
-    Summary(final Double quantity, final Price price, final OrderType orderType) {
+    Summary(final Quantity quantity, final Price price, final OrderType orderType) {
         this.quantity = quantity;
         this.price = price;
         this.orderType = orderType;
     }
 
 
-    static Summary aSummaryOf(final Double quantity, final Price price, Function<Double, OrderType> typeForQuantity) {
-        return new Summary(Math.abs(quantity), price, typeForQuantity.apply(quantity));
+    static Summary aSummaryOf(final Quantity quantity, final Price price, Function<Quantity, OrderType> typeForQuantity) {
+        return new Summary(quantity.abs(), price, typeForQuantity.apply(quantity));
     }
 
-    double quantity() {
+    Quantity quantity() {
         return quantity;
     }
 

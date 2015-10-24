@@ -1,5 +1,6 @@
 package com.silverbars.lambda;
 
+
 public enum OrderType {
     BUY {
         @Override
@@ -14,5 +15,6 @@ public enum OrderType {
         }
     };
 
-    public abstract int comparePrice(Price priceToCompare, Price priceToCompareWith);
+    abstract int comparePrice(Price priceToCompare, Price priceToCompareWith);
+
 }

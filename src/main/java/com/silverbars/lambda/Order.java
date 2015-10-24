@@ -3,19 +3,19 @@ package com.silverbars.lambda;
 class Order {
 
     private final String userId;
-    private final double quantity;
+    private final Quantity quantity;
     private final Price price;
     private final OrderType orderType;
 
 
-    Order(final String userId, final double quantity, final Price price, final OrderType orderType) {
+    Order(final String userId, final Quantity quantity, final Price price, final OrderType orderType) {
         this.userId = userId;
         this.quantity = quantity;
         this.price = price;
         this.orderType = orderType;
     }
 
-    double quantity() {
+    Quantity quantity() {
         return quantity;
     }
 
@@ -35,9 +35,9 @@ class Order {
 
         Order order = (Order) o;
 
-        if (Double.compare(order.quantity, quantity) != 0) return false;
         if (orderType != order.orderType) return false;
         if (!price.equals(order.price)) return false;
+        if (!quantity.equals(order.quantity)) return false;
         if (!userId.equals(order.userId)) return false;
 
         return true;
@@ -45,13 +45,11 @@ class Order {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = userId.hashCode();
-        temp = Double.doubleToLongBits(quantity);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        int result = userId.hashCode();
+        result = 31 * result + quantity.hashCode();
         result = 31 * result + price.hashCode();
         result = 31 * result + orderType.hashCode();
         return result;
     }
+
 }
