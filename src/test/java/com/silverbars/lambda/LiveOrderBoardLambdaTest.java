@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.silverbars.lambda.OrderType.BUY;
 import static com.silverbars.lambda.OrderType.SELL;
+import static com.silverbars.lambda.Price.aPrice;
 import static com.silverbars.lambda.Summary.aSummaryOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,13 +20,13 @@ public class LiveOrderBoardLambdaTest {
 
 
     private static final double A_QUANTITY = 3.5;
-    private static final int A_PRICE = 303;
-    private static final int LOW_PRICE = 100;
-    private static final int HIGH_PRICE = 200;
-    private static final int LOW_BUY_PRICE = 100;
-    private static final int HIGH_BUY_PRICE = 200;
-    private static final int HIGH_SELL_PRICE = 400;
-    private static final int LOW_SELL_PRICE = 300;
+    private static final Price A_PRICE = new Price(303);
+    private static final Price LOW_PRICE = new Price(100);
+    private static final Price HIGH_PRICE = new Price(200);
+    private static final Price LOW_BUY_PRICE = new Price(100);
+    private static final Price HIGH_BUY_PRICE = new Price(200);
+    private static final Price HIGH_SELL_PRICE = new Price(400);
+    private static final Price LOW_SELL_PRICE = new Price(300);
     private static final String ANY_USER = "user1";
     private static final double ANY_QUANTITY = 5.0;
     private LiveOrderBoardLambda orderBoard;
@@ -67,21 +68,21 @@ public class LiveOrderBoardLambdaTest {
 
     @Test public void
     boardContainsTwoOrders_WhenTwoDifferentOrdersAreRegistered() {
-        orderBoard.register("user1", 3.5, 303, BUY);
-        orderBoard.register("user1", 5.0, 503, SELL);
+        orderBoard.register("user1", 3.5, aPrice(303), BUY);
+        orderBoard.register("user1", 5.0, aPrice(503), SELL);
 
         orderSummary = orderBoard.summary();
 
         assertThat(orderSummary.size(), is(2));
-        assertOrderSummaryContains(3.5, 303, BUY);
-        assertOrderSummaryContains(5.0, 503, SELL);
+        assertOrderSummaryContains(3.5, aPrice(303), BUY);
+        assertOrderSummaryContains(5.0, aPrice(503), SELL);
     }
 
 
     @Test public void
     boardContainsNoOrders_WhenOrderIsRegisteredAndThenCancelled() {
-        orderBoard.register("user1", 3.5, 303, BUY);
-        orderBoard.cancel("user1", 3.5, 303, BUY);
+        orderBoard.register("user1", 3.5, aPrice(303), BUY);
+        orderBoard.cancel("user1", 3.5, aPrice(303), BUY);
 
         assertThat(orderBoard.summary(), is(empty()));
     }
@@ -90,24 +91,24 @@ public class LiveOrderBoardLambdaTest {
 
     @Test public void
     boardContainsOneOrder_WhenTwoDifferentOrdersRegisteredAndThenOneCancelled() {
-        orderBoard.register("user1", 3.5, 303, BUY);
-        orderBoard.register("user2", 3.5, 403, BUY);
+        orderBoard.register("user1", 3.5, aPrice(303), BUY);
+        orderBoard.register("user2", 3.5, aPrice(403), BUY);
 
-        orderBoard.cancel("user1", 3.5, 303, BUY);
+        orderBoard.cancel("user1", 3.5, aPrice(303), BUY);
 
         orderSummary = orderBoard.summary();
 
         assertThat(orderSummary.size(), is(1));
-        assertOrderSummaryContains(3.5, 403, BUY);
+        assertOrderSummaryContains(3.5, aPrice(403), BUY);
     }
 
     @Test public void
     boardContainsNoOrder_WhenTwoDifferentOrdersAreRegisteredAndThenBothCancelled() {
-        orderBoard.register("user1", 3.5, 303, BUY);
-        orderBoard.register("user2", 3.5, 403, SELL);
+        orderBoard.register("user1", 3.5, aPrice(303), BUY);
+        orderBoard.register("user2", 3.5, aPrice(403), SELL);
 
-        orderBoard.cancel("user1", 3.5, 303, BUY);
-        orderBoard.cancel("user2", 3.5, 403, SELL);
+        orderBoard.cancel("user1", 3.5, aPrice(303), BUY);
+        orderBoard.cancel("user2", 3.5, aPrice(403), SELL);
 
         assertThat(orderBoard.summary().size(), is(0));
     }
@@ -228,19 +229,19 @@ public class LiveOrderBoardLambdaTest {
         assertOrderSummaryContains(0.5, HIGH_PRICE, SELL);
     }
 
-    private void registerOrderWith(int price, OrderType type) {
+    private void registerOrderWith(Price price, OrderType type) {
         orderBoard.register(ANY_USER, ANY_QUANTITY, price, type);
     }
 
-    private int positionInBoardOfOrderWith(final int price, final OrderType type) {
+    private int positionInBoardOfOrderWith(final Price price, final OrderType type) {
         return orderSummary.indexOf(aSummaryOf(ANY_QUANTITY, price, q -> type));
     }
 
-    private void assertOrderSummaryContains(final double quantity, final int price, final OrderType type) {
+    private void assertOrderSummaryContains(final double quantity, final Price price, final OrderType type) {
         assertThat(orderSummary, hasItem(new Summary(quantity, price, type)));
     }
 
-    private void assertOrderSummary(final int position, final double quantity, final int price) {
+    private void assertOrderSummary(final int position, final double quantity, final Price price) {
         assertThat(orderSummary.get(position).quantity(), is(quantity));
         assertThat(orderSummary.get(position).price(), is(price));
     }

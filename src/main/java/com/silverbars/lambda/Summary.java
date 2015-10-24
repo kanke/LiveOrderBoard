@@ -5,17 +5,17 @@ import java.util.function.Function;
 class Summary {
 
     private final Double quantity;
-    private final Integer price;
+    private final Price price;
     private final OrderType orderType;
 
-    Summary(final Double quantity, final int price, final OrderType orderType) {
+    Summary(final Double quantity, final Price price, final OrderType orderType) {
         this.quantity = quantity;
         this.price = price;
         this.orderType = orderType;
     }
 
 
-    static Summary aSummaryOf(final Double quantity, final int price, Function<Double, OrderType> typeForQuantity) {
+    static Summary aSummaryOf(final Double quantity, final Price price, Function<Double, OrderType> typeForQuantity) {
         return new Summary(Math.abs(quantity), price, typeForQuantity.apply(quantity));
     }
 
@@ -23,7 +23,7 @@ class Summary {
         return quantity;
     }
 
-    Integer price() {
+    Price price() {
         return price;
     }
 

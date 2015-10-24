@@ -23,7 +23,7 @@ public class LiveOrderBoardLambda {
     }
 
     public List<Summary> summary() {
-        Map<Integer, Double> aggregatedQuantityPerPrice = orders.stream()
+        Map<Price, Double> aggregatedQuantityPerPrice = orders.stream()
                                                             .collect(groupingBy(Order::price,
                                                                     reducing(0.0,
                                                                              (order) -> {
@@ -56,11 +56,11 @@ public class LiveOrderBoardLambda {
     }
 
 
-    public void register(String user, double quantity, int price, OrderType orderType) {
+    public void register(String user, double quantity, Price price, OrderType orderType) {
         orders.add(new Order(user, quantity, price, orderType));
     }
 
-    public void cancel(String user, double quantity, int price, OrderType orderType) {
+    public void cancel(String user, double quantity, Price price, OrderType orderType) {
         orders.remove(new Order(user, quantity, price, orderType));
     }
 

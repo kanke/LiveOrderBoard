@@ -4,11 +4,11 @@ class Order {
 
     private final String userId;
     private final double quantity;
-    private final Integer price;
+    private final Price price;
     private final OrderType orderType;
 
 
-    Order(final String userId, final double quantity, final Integer price, final OrderType orderType) {
+    Order(final String userId, final double quantity, final Price price, final OrderType orderType) {
         this.userId = userId;
         this.quantity = quantity;
         this.price = price;
@@ -19,13 +19,14 @@ class Order {
         return quantity;
     }
 
-    Integer price() {
+    Price price() {
         return price;
     }
 
     OrderType type() {
         return orderType;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -53,5 +54,4 @@ class Order {
         result = 31 * result + orderType.hashCode();
         return result;
     }
-
 }
