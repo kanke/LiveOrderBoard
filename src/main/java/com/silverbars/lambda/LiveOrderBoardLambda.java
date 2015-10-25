@@ -26,14 +26,8 @@ public class LiveOrderBoardLambda {
     public List<Summary> summary() {
         Map<Price, Quantity> aggregatedQuantityPerPrice = orders.stream()
                                                             .collect(groupingBy(Order::price,
-                                                                    reducing(aQuantity(0.0),
-                                                                            (order) -> {
-                                                                                if (order.type() == SELL) {
-                                                                                    return order.quantity().negative();
-                                                                                } else {
-                                                                                    return order.quantity();
-                                                                                }
-                                                                            }
+                                                                    reducing(aQuantity(0.0)
+                                                                            , (order) -> order.type().quantityForType(order.quantity())
                                                                             , Quantity::sum))
                                                             );
 
