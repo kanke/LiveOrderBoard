@@ -22,30 +22,29 @@ public class LiveOrderBoardLambda {
     }
 
     public List<Summary> summary() {
-        Map<Price, Quantity> aggregatedQuantityPerPrice = orders.stream()
-                                                            .collect(groupingBy(Order::price,
-                                                                    reducing(aQuantity(0.0)
-                                                                            , Order::quantityForType
-                                                                            , Quantity::sum))
-                                                            );
+        final Map<Price, Quantity> aggregatedQuantityPerPrice = orders.stream()
+                                                                    .collect(groupingBy(Order::price,
+                                                                            reducing(aQuantity(0.0)
+                                                                                    , Order::quantityForType
+                                                                                    , Quantity::sum))
+                                                                    );
 
-        List<Summary> summaryForPrice =  aggregatedQuantityPerPrice
-                                        .entrySet()
-                                        .stream()
-                                        .map(price -> aSummaryOf(price.getValue(), price.getKey(), Quantity::typeForQuantity))
-                                        .collect(toList());
+        final List<Summary> summaryForPrice =  aggregatedQuantityPerPrice
+                                                .entrySet()
+                                                .stream()
+                                                .map(price -> aSummaryOf(price.getValue(), price.getKey(), OrderType::typeForQuantity))
+                                                .collect(toList());
 
         return summaryForPrice.stream()
                             .sorted(BY_TYPE.thenComparing(BY_PRICE))
                             .collect(toList());
     }
 
-
-    public void register(String user, Quantity quantity, Price price, OrderType orderType) {
+    public void register(final String user, final Quantity quantity, final Price price, final OrderType orderType) {
         orders.add(new Order(user, quantity, price, orderType));
     }
 
-    public void cancel(String user, Quantity quantity, Price price, OrderType orderType) {
+    public void cancel(final String user, final Quantity quantity, final Price price, final OrderType orderType) {
         orders.remove(new Order(user, quantity, price, orderType));
     }
 

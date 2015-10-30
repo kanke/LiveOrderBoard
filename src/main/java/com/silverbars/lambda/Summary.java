@@ -15,7 +15,7 @@ class Summary {
     }
 
 
-    static Summary aSummaryOf(final Quantity quantity, final Price price, Function<Quantity, OrderType> typeForQuantity) {
+    static Summary aSummaryOf(final Quantity quantity, final Price price, final Function<Quantity, OrderType> typeForQuantity) {
         return new Summary(quantity.abs(), price, typeForQuantity.apply(quantity));
     }
 

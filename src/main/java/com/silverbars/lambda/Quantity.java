@@ -1,8 +1,5 @@
 package com.silverbars.lambda;
 
-import static com.silverbars.lambda.OrderType.BUY;
-import static com.silverbars.lambda.OrderType.SELL;
-
 public class Quantity {
 
     private Double value;
@@ -27,18 +24,13 @@ public class Quantity {
         return aQuantity(Math.abs(value) * -1.0);
     }
 
-    OrderType typeForQuantity() {
-        if (quantityLessThanZero()) {
-            return SELL;
-        } else {
-            return BUY;
-        }
+    boolean greaterThanEqualToZero() {
+        return value >= 0.0;
     }
 
-    boolean quantityLessThanZero() {
+    boolean lessThanZero() {
         return value < 0.0;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -57,4 +49,10 @@ public class Quantity {
         return value.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Quantity{" +
+                "value=" + value +
+                '}';
+    }
 }

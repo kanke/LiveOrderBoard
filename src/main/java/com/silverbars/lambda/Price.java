@@ -8,12 +8,12 @@ public class Price implements Comparable<Price>{
         this.amount = amount;
     }
 
-    static Price aPrice(Integer amount) {
+    static Price aPrice(final Integer amount) {
         return new Price(amount);
     }
 
     @Override
-    public int compareTo(Price priceToCompare) {
+    public int compareTo(final Price priceToCompare) {
         return amount.compareTo(priceToCompare.amount);
     }
 
@@ -34,4 +34,10 @@ public class Price implements Comparable<Price>{
         return amount.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Price{" +
+                "amount=" + amount +
+                '}';
+    }
 }
