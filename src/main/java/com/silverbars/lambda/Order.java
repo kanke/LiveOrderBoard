@@ -27,6 +27,10 @@ class Order {
         return orderType;
     }
 
+    Quantity quantityForType() {
+        return orderType.quantityForType(quantity);
+    }
+
 
     @Override
     public boolean equals(Object o) {
