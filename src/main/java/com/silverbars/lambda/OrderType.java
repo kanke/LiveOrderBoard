@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public enum OrderType {
-    BUY(quantity -> quantity.greaterThanEqualToZero()) {
+    BUY(quantity -> quantity.is(value -> value >= 0)) {
         @Override
         public int comparePrice(Price priceToCompare, Price priceToCompareWith) {
             return HIGH_PRICE.compare(priceToCompare, priceToCompareWith);
@@ -19,7 +19,7 @@ public enum OrderType {
             return aQuantity.abs();
         }
     },
-    SELL(quantity -> quantity.lessThanZero()) {
+    SELL(quantity -> quantity.is(value -> value < 0)) {
         @Override
         public int comparePrice(Price priceToCompare, Price priceToCompareWith) {
             return LOW_PRICE.compare(priceToCompare, priceToCompareWith);

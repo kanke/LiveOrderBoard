@@ -1,5 +1,7 @@
 package com.silverbars.lambda;
 
+import java.util.function.Predicate;
+
 public class Quantity {
 
     private Double value;
@@ -24,12 +26,8 @@ public class Quantity {
         return aQuantity(Math.abs(value) * -1.0);
     }
 
-    boolean greaterThanEqualToZero() {
-        return value >= 0.0;
-    }
-
-    boolean lessThanZero() {
-        return value < 0.0;
+    boolean is(Predicate<Double> valueCheck) {
+        return valueCheck.test(value);
     }
 
     @Override
