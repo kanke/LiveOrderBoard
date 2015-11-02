@@ -3,6 +3,7 @@ package com.silverbars.oo;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.silverbars.oo.Quantity.aQuantity;
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
 
@@ -14,7 +15,7 @@ public enum OrderType {
     },
     SELL(NEGATIVE_INFINITY) {
         public Quantity quantity(final Quantity quantity) {
-            return new Quantity(Math.abs(quantity.value()) * -1.0);
+            return aQuantity(Math.abs(quantity.value())).negative();
         }
     };
 

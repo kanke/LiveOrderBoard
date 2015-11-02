@@ -8,6 +8,18 @@ public class Quantity {
         this.value = value;
     }
 
+    static Quantity aQuantity(final double value) {
+        return new Quantity(value);
+    }
+
+    Quantity abs() {
+        return new Quantity(Math.abs(value));
+    }
+
+    Quantity negative() {
+        return new Quantity(Math.abs(value) * -1.0);
+    }
+
     Double value() {
         return value;
     }

@@ -50,7 +50,7 @@ public enum OrderType {
     static OrderType typeForQuantity(Quantity quantity) {
         return quantityToTypeMatcher.entrySet().stream()
                 .filter(currentMatcher -> currentMatcher.getKey().test(quantity))
-                .map(y -> y.getValue())
+                .map(matcher -> matcher.getValue())
                 .findFirst()
                 .get();
     }

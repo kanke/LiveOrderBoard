@@ -4,53 +4,54 @@ import java.util.*;
 
 import static com.silverbars.oo.OrderType.BUY;
 import static com.silverbars.oo.OrderType.SELL;
-import static com.silverbars.oo.QuantityType.aQuantityType;
+import static com.silverbars.oo.OrderType.typeFor;
 import static com.silverbars.oo.Summary.aSummaryOf;
 
 public class Summariser {
 
-    private static final QuantityType ZERO_QUANTITY = aQuantityType(new Quantity(0), BUY);
+    private static final Quantity ZERO_QUANTITY = new Quantity(0);
 
     List<Summary> summarise(final List<Order> orders) {
-        final Map<Price, List<QuantityType>> quantitiesByPrice = groupOrderQuantityAndTypeByPrice(orders);
+        final Map<Price, List<Quantity>> quantitiesByPrice = groupOrderQuantityAndTypeByPrice(orders);
 
         final List<Summary> summaries = summariseOrdersByAggregating(quantitiesByPrice);
+
         summaries.sort(byType());
         summaries.sort(byPrice());
 
         return summaries;
     }
 
-    private Map<Price, List<QuantityType>> groupOrderQuantityAndTypeByPrice(final List<Order> orders) {
-        final Map<Price, List<QuantityType>> groupedQuantites = new HashMap<>();
+    private Map<Price, List<Quantity>> groupOrderQuantityAndTypeByPrice(final List<Order> orders) {
+        final Map<Price, List<Quantity>> groupedQuantites = new HashMap<>();
 
         for (Order order : orders) {
             final Price priceForQuantity = new Price(order.price());
-            final QuantityType quantityType = aQuantityType(new Quantity(order.quantity()), order.type());
+            final Quantity quantity = order.type().quantity(new Quantity(order.quantity()));
 
             if (groupedQuantites.containsKey(priceForQuantity)){
-                groupedQuantites.get(priceForQuantity).add(quantityType);
+                groupedQuantites.get(priceForQuantity).add(quantity);
             } else {
-                final List<QuantityType> quantityAndTypeForPrice = new ArrayList<>();
-                quantityAndTypeForPrice.add(quantityType);
-                groupedQuantites.put(priceForQuantity, quantityAndTypeForPrice);
+                final List<Quantity> quantityForPrice = new ArrayList<>();
+                quantityForPrice.add(quantity);
+                groupedQuantites.put(priceForQuantity, quantityForPrice);
             }
         }
 
         return groupedQuantites;
     }
 
-    private List<Summary> summariseOrdersByAggregating(final Map<Price, List<QuantityType>> quantityTypePerPrice) {
+    private List<Summary> summariseOrdersByAggregating(final Map<Price, List<Quantity>> quantityPerPrice) {
         final List<Summary> summaries = new ArrayList<>();
 
-        for (Price price : quantityTypePerPrice.keySet()) {
-            QuantityType quantityAndType = ZERO_QUANTITY;
+        for (Price price : quantityPerPrice.keySet()) {
+            Quantity quantity = ZERO_QUANTITY;
 
-            for (QuantityType quantityTypeForPrice : quantityTypePerPrice.get(price)) {
-                quantityAndType = quantityAndType.aggregateWith(quantityTypeForPrice);
+            for (Quantity quantityForPrice : quantityPerPrice.get(price)) {
+                quantity = quantity.sum(quantityForPrice);
             }
 
-            summaries.add(aSummaryOf(quantityAndType.quantity(), price.amount(), quantityAndType.type()));
+            summaries.add(aSummaryOf(quantity.abs(), price.amount(), typeFor(quantity.value())));
         }
 
         return summaries;
